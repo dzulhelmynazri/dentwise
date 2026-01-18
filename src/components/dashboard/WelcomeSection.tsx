@@ -4,6 +4,13 @@ import Image from "next/image";
 export default async function WelcomeSection() {
   const user = await currentUser();
 
+  const getTimeOfDay = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "morning";
+    if (hour < 18) return "afternoon";
+    return "evening";
+  };
+
   return (
     <div className="relative z-10 flex items-center justify-between bg-gradient-to-br from-primary/10 via-primary/5 to-background rounded-3xl p-8 border border-primary/20 mb-12 overflow-hidden">
       <div className="space-y-4">
@@ -15,13 +22,7 @@ export default async function WelcomeSection() {
         </div>
         <div>
           <h1 className="text-4xl font-bold mb-2">
-            Good{" "}
-            {new Date().getHours() < 12
-              ? "morning"
-              : new Date().getHours() < 18
-                ? "afternoon"
-                : "evening"}
-            , {user?.firstName}!
+            Good {getTimeOfDay()}, {user?.firstName}!
           </h1>
           <p className="text-muted-foreground">
             Your personal AI dental assistant is ready to help you maintain

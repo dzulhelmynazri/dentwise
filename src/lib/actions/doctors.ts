@@ -1,9 +1,9 @@
 "use server";
 
-import { Gender } from "@prisma/client";
+import type { Gender } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { prisma } from "../prisma";
 import { generateAvatar } from "../utils";
-import { revalidatePath } from "next/cache";
 
 export async function getDoctors() {
   try {
@@ -35,7 +35,8 @@ interface CreateDoctorInput {
 
 export async function createDoctor(input: CreateDoctorInput) {
   try {
-    if (!input.name || !input.email) throw new Error("Name and email are required");
+    if (!input.name || !input.email)
+      throw new Error("Name and email are required");
 
     const doctor = await prisma.doctor.create({
       data: {
@@ -47,6 +48,7 @@ export async function createDoctor(input: CreateDoctorInput) {
     revalidatePath("/admin");
 
     return doctor;
+    // biome-ignore lint/suspicious/noExplicitAny: <ignore>
   } catch (error: any) {
     console.error("Error creating doctor:", error);
 
@@ -66,7 +68,8 @@ interface UpdateDoctorInput extends Partial<CreateDoctorInput> {
 export async function updateDoctor(input: UpdateDoctorInput) {
   try {
     // validate
-    if (!input.name || !input.email) throw new Error("Name and email are required");
+    if (!input.name || !input.email)
+      throw new Error("Name and email are required");
 
     const currentDoctor = await prisma.doctor.findUnique({
       where: { id: input.id },
