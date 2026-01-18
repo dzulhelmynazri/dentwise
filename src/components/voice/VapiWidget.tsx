@@ -19,12 +19,13 @@ function VapiWidget() {
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   // auto-scroll for messages
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <ignore>
   useLayoutEffect(() => {
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
         messageContainerRef.current.scrollHeight;
     }
-  }, []);
+  }, [messages.length]);
 
   // setup event listeners for VAPI
   useEffect(() => {
